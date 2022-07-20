@@ -1,5 +1,6 @@
 from aiogram import executor
 from config import dp
+from moduls.main_chat import init_chat
 
 
 async def on_startup(_):
