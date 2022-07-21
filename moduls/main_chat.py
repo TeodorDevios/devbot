@@ -20,8 +20,11 @@ async def help_message(message: Message):
 
 
 async def report(message: Message):
-    await bot.send_message(message.chat.id, texts['report'][0])
-    await Report.report_headline.set()
+    if message.chat.type == 'private':
+        await bot.send_message(message.chat.id, texts['report'][0])
+        await Report.report_headline.set()
+    else:
+        await message.reply('Напиши в лс, там и поболтаем ;)')
 
 
 async def report_headline(message: Message, state: FSMContext):
@@ -43,3 +46,4 @@ def init_chat(dp: Dispatcher):
     dp.register_message_handler(report, commands=['report'])
     dp.register_message_handler(report_headline, state=Report.report_headline)
     dp.register_message_handler(report_text, state=Report.report_text)
+
