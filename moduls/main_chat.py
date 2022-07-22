@@ -57,8 +57,8 @@ async def generate_code(message: Message):
 
 async def file_with_code(message: Message, state: FSMContext):
     async with state.proxy() as data:
-        data['code_language'] = message.text.lower()
-    is_code = check_language(data['code_language'])
+        Code.exs = data['code_language'] = message.text.lower()
+    is_code = check_language(data['code_language'])[1]
     if is_code:
         await message.reply('А теперь кидай код')
         await Code.next()
