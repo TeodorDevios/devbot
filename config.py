@@ -12,3 +12,10 @@ texts = {
                'Такс, а теперь опиши суть'
                ]
 }
+langs = ['py', 'html', 'css', 'js']
+
+
+def check_language(language):
+    if language in langs:
+        return True
+    return False
