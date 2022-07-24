@@ -1,6 +1,7 @@
 from aiogram.types import Message
 from aiogram import types, Dispatcher
 from config import bot, dp, texts, check_language
+import database
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.dispatcher import FSMContext
 
@@ -42,6 +43,8 @@ async def report_headline(message: Message, state: FSMContext):
 async def report_text(message: Message, state: FSMContext):
     async with state.proxy() as data:
         data['report_text'] = message.text
+        report = (message.chat.id, data['report_headline'], data['report_text'])
+        database.add_report(report)
     await state.finish()
     await bot.send_message(message.chat.id, 'Репорт отправлен. Ожидай ответа =)')
 
@@ -60,7 +63,7 @@ async def file_with_code(message: Message, state: FSMContext):
         Code.exs = data['code_language'] = message.text.lower()
     is_code = check_language(data['code_language'])[1]
     if is_code:
-        await message.reply('А теперь кидай код (Он должен помеситься в одно сообщение)')
+        await message.reply('А теперь кидай код')
         await Code.next()
     else:
         await message.reply('Ты не умеешь читать, солнышко?) Повтори попытку еще раз')
@@ -77,7 +80,7 @@ async def code_info(message: Message, state: FSMContext):
     await state.finish()
 
 
-def init_chat(dp: Dispatcher):
+def init_main_chat(dp: Dispatcher):
     dp.register_message_handler(start_message, commands=['start'])
     dp.register_message_handler(help_message, commands=['help'])
     dp.register_message_handler(report, commands=['report'])
