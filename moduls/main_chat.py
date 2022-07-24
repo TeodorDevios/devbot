@@ -60,7 +60,7 @@ async def file_with_code(message: Message, state: FSMContext):
         Code.exs = data['code_language'] = message.text.lower()
     is_code = check_language(data['code_language'])[1]
     if is_code:
-        await message.reply('А теперь кидай код')
+        await message.reply('А теперь кидай код (Он должен помеситься в одно сообщение)')
         await Code.next()
     else:
         await message.reply('Ты не умеешь читать, солнышко?) Повтори попытку еще раз')
